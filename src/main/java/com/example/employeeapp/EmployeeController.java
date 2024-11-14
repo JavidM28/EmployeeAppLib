@@ -1,6 +1,9 @@
 package com.example.employeeapp;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,10 @@ public class EmployeeController {
 
     @PostMapping
     public Employee addEmployee(@RequestParam String name, @RequestParam int department, @RequestParam double salary) {
+        if (StringUtils.isBlank(name)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name and last name cannot be blank.");
+        }
+        name = StringUtils.capitalize(name.toLowerCase());
         return employeeService.addEmployee(name, department, salary);
     }
 
